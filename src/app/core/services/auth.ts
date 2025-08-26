@@ -1,35 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface LoginCredentials {
-  username: string;
-  password: string;
-}
-
-export interface TokenResponse {
-  access: string;
-  refresh: string;
-}
+import { API_URL } from '../../config/api.config';  
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://pekpet-api-testing.devcrespo.tech/api/v1/auth';
 
   constructor(private http: HttpClient) {}
 
-  login(credentials: LoginCredentials): Observable<TokenResponse> {
-    return this.http.post<TokenResponse>(`${this.apiUrl}/token/`, credentials);
+  
+  login(credentials: { username: string; password: string }): Observable<any> {
+    return this.http.post(`${API_URL}/auth/token/`, credentials);
   }
 
-  refreshToken(refresh: string): Observable<TokenResponse> {
-    return this.http.post<TokenResponse>(`${this.apiUrl}/token/refresh/`, { refresh });
+  
+  refresh(refreshToken: string): Observable<any> {
+    return this.http.post(`${API_URL}/auth/token/refresh/`, { refresh: refreshToken });
   }
 
-  verifyToken(token: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/token/verify/`, { token });
+  
+  verify(token: string): Observable<any> {
+    return this.http.post(`${API_URL}/auth/token/verify/`, { token });
   }
 }
 
